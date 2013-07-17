@@ -1,0 +1,36 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <h1>Index</h1>
+        <script type="text/javascript" src="/Scripts/jquery-2.0.2.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                var xhr = [];
+                var op = 0;
+                var foo = function (id) {
+                    var curOp = op++;
+                    console.log("op" + curOp + "(" + id + "): start at " + new Date());
+                    if (!!xhr[id]) xhr[id].abort();
+                    xhr[id%2] = $.get("/Home/LongRunningActionAsync/" + id)
+                        .done(function (data) {
+                            console.log("op" + curOp + "(" + id + "): finish at " + new Date());
+                            console.log("op" + curOp + "(" + id + "): result is " + data);
+                        })
+                        .fail(function(data) {
+                            console.log("op" + curOp + "(" + id + "): failed");
+                        });
+                };
+                foo(1);
+                setTimeout(function () { foo(2); }, 5000);
+                setTimeout(function () { foo(1); }, 7000);
+                setTimeout(function () { foo(1); }, 12000);
+                setTimeout(function () { foo(2); }, 16000);
+                setTimeout(function () { foo(2); }, 17000);
+                setTimeout(function () { foo(1); }, 24000);
+                setTimeout(function () { foo(1); }, 25000);
+            });
+        </script>
+    </body>
+</html>
