@@ -3,11 +3,12 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.SessionState;
 using Nito.AsyncEx;
 
 namespace SpikeAjaxCancellation.Controllers
 {
-    //[SessionState(SessionStateBehavior.Disabled)]
+    [SessionState(SessionStateBehavior.Disabled)]
     public class HomeController : Controller
     {
         private static readonly TimeSpan HeartBeatInterval = TimeSpan.FromSeconds(1);
