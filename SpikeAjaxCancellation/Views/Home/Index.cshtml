@@ -18,18 +18,18 @@
                             console.log("op" + curOp + "(" + id + "): finish at " + new Date());
                             console.log("op" + curOp + "(" + id + "): result is " + data);
                         })
-                        .fail(function(data) {
-                            console.log("op" + curOp + "(" + id + "): failed");
+                        .fail(function() {
+                            console.log("op" + curOp + "(" + id + "): aborted");
                         });
                 };
                 foo(1);
-                setTimeout(function () { foo(2); }, 5000);
-                setTimeout(function () { foo(1); }, 7000);
-                setTimeout(function () { foo(1); }, 12000);
-                setTimeout(function () { foo(2); }, 16000);
-                setTimeout(function () { foo(2); }, 17000);
-                setTimeout(function () { foo(1); }, 24000);
-                setTimeout(function () { foo(1); }, 25000);
+                setTimeout(function () { foo(2); }, 5000); // cancels nothing, different id - returns 20 at 15000ms
+                setTimeout(function () { foo(1); }, 7000); // should cancel first foo(1) - is cancelled at 12000ms
+                setTimeout(function () { foo(1); }, 12000); // should cancel second foo(1) - returns 10 at 22000ms
+                setTimeout(function () { foo(2); }, 16000); // cancels nothing - returns cached result instantly
+                setTimeout(function () { foo(2); }, 17000); // "
+                setTimeout(function () { foo(1); }, 24000); // "
+                setTimeout(function () { foo(1); }, 25000); // "
             });
         </script>
     </body>
